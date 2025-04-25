@@ -9,9 +9,25 @@ function DisplayList({todos,setTodo}) {
      }
 
 
-     function handleChange(id){
-      setTodo((previousTodos)=>previousTodos.map((todo)=>todo.id===id?{...todos, completed: !todo.completed}: todos))
-     }
+     function handleChange(id) {
+      const updatedTodos = todos.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      );
+      setTodo(updatedTodos);
+    
+      
+      const updatedTodo = updatedTodos.find((todo) => todo.id === id);
+    
+      fetch(`https://my-data-kappa.vercel.app/todos/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({ completed: updatedTodo.completed }),
+      })
+    }
+    
 
 
     useEffect(()=>{
